@@ -1,0 +1,1 @@
+window-title Traveling Salesman Problem
