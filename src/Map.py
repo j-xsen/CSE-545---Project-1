@@ -4,8 +4,8 @@ from direct.gui.DirectButton import DirectButton
 from panda3d.core import NodePath, CollisionHandlerQueue, CollisionTraverser, CollisionNode, CollisionRay, GeomNode, \
     TextNode
 
-from Bus import Bus
-from City import City
+from src.Bus import Bus
+from src.City import City
 
 
 class Map(NodePath):
@@ -29,7 +29,7 @@ class Map(NodePath):
         self.bus = Bus()
 
         self.generate_routes_button = DirectButton(text="Generate Routes", scale=0.07,
-                                                    pos=(1, 0, -0.9),
+                                                   pos=(1, 0, -0.9),
                                                    command=self.generate_routes)
         self.reset_button = DirectButton(text="Reset", scale=0.07,
                                          pos=(1, 0, -0.8),
@@ -109,6 +109,7 @@ class Map(NodePath):
     @property
     def TSP(self):
         return self._TSP
+
     @TSP.setter
     def TSP(self, value):
         self._TSP = value

@@ -2,11 +2,10 @@ import sys
 
 from direct.gui.DirectButton import DirectButton
 from direct.showbase.ShowBase import ShowBase
-from panda3d.core import loadPrcFile, CollisionRay, \
-    CollisionNode, GeomNode
+from panda3d.core import loadPrcFile
 
-from Map import Map
-from TSP import read_tsp
+from src.Map import Map
+from src.TSP import read_tsp
 
 loadPrcFile("./config.prc")
 
@@ -23,7 +22,7 @@ class TravelingSalesmanProblem(ShowBase):
         self.accept("escape", sys.exit)
 
         # load problem
-        self.imported_tsp = read_tsp('tsp/Random4.tsp')
+        self.imported_tsp = read_tsp('src/tsp/Random4.tsp')
 
         # create buttons to switch between problems
         self.problem_buttons = []
@@ -34,7 +33,7 @@ class TravelingSalesmanProblem(ShowBase):
         # accept mouse
         self.accept("mouse1-up", self.map.on_mouse_click)
 
-        self.load_problem('tsp/Random4.tsp')
+        self.load_problem('src/tsp/Random4.tsp')
 
     def load_problem(self, path):
         if path == self.current_problem:
@@ -47,7 +46,7 @@ class TravelingSalesmanProblem(ShowBase):
         self.map.create_cities(self.imported_tsp.coords)
 
         for i in range(4, 13):
-            extra_arg = f"tsp/Random{i}.tsp"
+            extra_arg = f"src/tsp/Random{i}.tsp"
             col = (i - 4) % 3
             row = (i - 4) // 3
 
