@@ -1,3 +1,6 @@
+import math
+
+
 class Coord:
     def __init__(self, name, x, y):
         self.name = name
@@ -43,7 +46,7 @@ class TSP:
     def __str__(self):
         print("--- TSP Instance ---")
         print(f"Name: {self.name}")
-        print(f"Dimension: {self.dimension}")
+        print(f"Dimension: {self.dimension} ({math.factorial(self.dimension)} possible routes)")
         for coord in self._coords:
             print(coord)
         return "--------------------"
@@ -51,7 +54,6 @@ class TSP:
 
 scale = 1
 def read_tsp(path):
-    print("Creating TSP")
     new_tsp = TSP()
     with open(path, 'r', encoding="utf-8") as f:
         coord_section = False
