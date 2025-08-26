@@ -40,9 +40,11 @@ class TravelingSalesmanProblem(ShowBase):
             return
         self.current_problem = path
         self.imported_tsp = read_tsp(path)
-        self.problem_buttons.clear()
+
 
         self.map.memory_reset()
+        self.map.TSP = self.imported_tsp
+        self.problem_buttons.clear()
         self.map.create_cities(self.imported_tsp.coords)
 
         for i in range(4, 13):

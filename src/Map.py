@@ -1,3 +1,4 @@
+import time
 from itertools import permutations
 
 from direct.gui.DirectButton import DirectButton
@@ -61,11 +62,16 @@ class Map(NodePath):
                 self.select_city(str(city_index + 1))
             results.append((self.bus.distance_traveled, self.route))
         results.sort(key=lambda x: x[0])
-        with open(f"{self.TSP.name}.txt", "w") as f:
+        with open(f"results/{self.TSP.name}.txt", "w") as f:
+            start_time = time.perf_counter()
             f.write("----- Results -----\n")
             for distance, route in results:
                 f.write(f"Distance: {distance}, Route: {', '.join(route)}\n")
             f.write("-------------------")
+            end_time = time.perf_counter()
+            execution_time = end_time - start_time
+            f.write(f"\nExecution time: {execution_time:.6f} seconds\n")
+            return
 
     def create_city(self, name, coords):
         new_city = City(name, coords)
