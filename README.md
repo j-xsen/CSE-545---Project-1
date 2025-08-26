@@ -2,6 +2,7 @@
 
 An interactive visualization of the Traveling Salesman Problem built with Panda3D. Load TSPLIB-style .tsp files, view cities as 3D markers, click to build a route, zoom/pan the scene, and optionally brute-force all permutations for small problem sizes to see the shortest routes and their distances.
 
+![homescreen.png](homescreen.png "Homescreen of the application")
 
 ## Features
 - Visualizes TSP nodes from .tsp files (TSPLIB-like format with NODE_COORD_SECTION).
