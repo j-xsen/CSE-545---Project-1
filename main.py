@@ -21,15 +21,12 @@ class TravelingSalesmanProblem(ShowBase):
         # accept close program
         self.accept("escape", sys.exit)
 
-        # load problem
-        self.imported_tsp = read_tsp('src/tsp/Random4.tsp')
-
         # create buttons to switch between problems
         self.problem_buttons = []
         self.current_problem = None
 
         # map
-        self.map = Map(TSP=self.imported_tsp)
+        self.map = Map()
         # accept mouse
         self.accept("mouse1-up", self.map.on_mouse_click)
 
@@ -39,13 +36,12 @@ class TravelingSalesmanProblem(ShowBase):
         if path == self.current_problem:
             return
         self.current_problem = path
-        self.imported_tsp = read_tsp(path)
-
+        imported_tsp = read_tsp(path)
 
         self.map.memory_reset()
-        self.map.TSP = self.imported_tsp
+        self.map.TSP = imported_tsp
         self.problem_buttons.clear()
-        self.map.create_cities(self.imported_tsp.coords)
+        self.map.create_cities(imported_tsp.coords)
 
         for i in range(4, 13):
             extra_arg = f"src/tsp/Random{i}.tsp"

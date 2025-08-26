@@ -2,6 +2,7 @@ import time
 from itertools import permutations
 
 from direct.gui.DirectButton import DirectButton
+from direct.gui.DirectSlider import DirectSlider
 from panda3d.core import NodePath, CollisionHandlerQueue, CollisionTraverser, CollisionNode, CollisionRay, GeomNode, \
     TextNode
 
@@ -36,9 +37,29 @@ class Map(NodePath):
                                          pos=(1, 0, -0.8),
                                          command=self.reset)
 
-        self.setPos(0, 500, 0)
+        ## distance slider node
+        distance_slider_node = NodePath("DistanceSlider")
+        distance_slider_node.setPos(-.95, 0, -.4)
+        distance_slider_node.reparentTo(aspect2d)
+
+        # text
+        distance_slider_text = TextNode("distance_slider")
+        distance_slider_text.setText("Zoom")
+        distance_slider_text.setAlign(TextNode.ACenter)
+        distance_slider_node_path = distance_slider_node.attachNewNode(distance_slider_text)
+        distance_slider_node_path.setScale(0.07)
+        distance_slider_node_path.setPos(0, 0, 0.1)
+
+        # slider
+        self.slider = DirectSlider(range=(1000, 0), value=500, scale=0.3,
+                                   command=lambda: self.setY(self.slider['value']),)
+        self.slider.reparentTo(distance_slider_node)
+
+
+        self.setPos(0, self.slider['value'], 0)
         self.cities = []
-        self.create_cities(self.TSP.coords)
+        if self.TSP is not None:
+            self.create_cities(self.TSP.coords)
 
     def reset(self):
         for city in self.cities:
