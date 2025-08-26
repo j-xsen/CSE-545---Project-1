@@ -49,7 +49,7 @@ class TSP:
         return "--------------------"
 
 
-scale = 10
+scale = 1
 def read_tsp(path):
     print("Creating TSP")
     new_tsp = TSP()
