@@ -12,7 +12,7 @@ class Map(NodePath):
     def __init__(self, TSP=None):
         NodePath.__init__(self, "map")
         self.reparentTo(render)
-        self.TSP = TSP
+        self._TSP = TSP
 
         # add collision traverser and handler
         self.c_trav = CollisionTraverser()
@@ -37,6 +37,7 @@ class Map(NodePath):
 
         self.setPos(0, 500, 0)
         self.cities = []
+        self.create_cities(self.TSP.coords)
 
     def reset(self):
         for city in self.cities:
@@ -45,6 +46,12 @@ class Map(NodePath):
         self.route_text.setText("Route: ")
         self.bus.current_coords = None
         self.bus.distance_traveled = 0
+
+    def memory_reset(self):
+        self.reset()
+        for city in self.cities:
+            city.removeNode()
+        self.cities = []
 
     def generate_routes(self):
         results = []
@@ -98,3 +105,10 @@ class Map(NodePath):
                 if not pickedObj.isEmpty():
                     self.select_city(str(pickedObj).split("-")[1])
             pickerNP.removeNode()
+
+    @property
+    def TSP(self):
+        return self._TSP
+    @TSP.setter
+    def TSP(self, value):
+        self._TSP = value
