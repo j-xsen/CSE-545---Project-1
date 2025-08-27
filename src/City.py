@@ -5,6 +5,7 @@ from panda3d.core import NodePath, TextNode
 UNSELECTED = (0, 1, 0, 1)
 SELECTED = (1, 0, 0, 1)
 FIRST_SELECTED = (0, 0, 1, 1)
+CIRCUIT_COMPLETE = (1,.84,0,1)
 
 
 class City(NodePath):
@@ -30,6 +31,14 @@ class City(NodePath):
 
         self.selected = False
         self.first_city = False
+
+    def set_circuit_complete(self):
+        self.model.setColor(CIRCUIT_COMPLETE)
+
+    def reset(self):
+        self.selected = False
+        self.first_city = False
+        self.model.setColor(UNSELECTED)
 
     @property
     def coords(self):
@@ -74,6 +83,3 @@ class City(NodePath):
     @name.setter
     def name(self, value):
         self._name = value
-
-    def render(self):
-        pass

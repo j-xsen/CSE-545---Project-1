@@ -27,6 +27,7 @@ class Map(NodePath):
         self.route_text_path.setScale(0.07)
         self.route_text_path.setPos(-1.3, 0, 0.8)
         self.route = []
+        self.route_complete = False
 
         self.bus = Bus()
         self.bus.reparentTo(self)
@@ -65,7 +66,9 @@ class Map(NodePath):
     def reset(self):
         for city in self.cities:
             city.selected = False
-        self._route = []
+            city.first_city = False
+        self.route = []
+        self.route_complete = False
         self.route_text.setText("Route: ")
         self.bus.reset()
 
@@ -106,13 +109,29 @@ class Map(NodePath):
             city_id += 1
 
     def select_city(self, city_id):
-        if self.cities[int(city_id) - 1].selected:
-            print(f"City {city_id} already selected")
-            return
+        is_selected = self.cities[int(city_id) - 1].selected
+        is_first_city = (len(self.route) == 0) or self.cities[int(city_id) - 1].first_city
+        print(f"Selecting city {city_id} first_city: {is_first_city})")
+        # check if city already selected
+        if is_selected:
+            # check if not first city
+            if not is_first_city:
+                print(f"City {city_id} already selected")
+                return
         self.route.append(city_id)
+        self.route_text.setText(f"Route: {', '.join(self.route)}")
         self.bus.add_stop(self.cities[int(city_id) - 1].coords)
+
+        # check if loop
+        if is_selected and is_first_city:
+            print("Route complete")
+            self.route_complete = True
+            for city in self.cities:
+                city.set_circuit_complete()
+            return
+
         self.cities[int(city_id) - 1].selected = True
-        self.cities[int(city_id) - 1].first_city = (len(self.route) == 1)
+        self.cities[int(city_id) - 1].first_city = is_first_city
 
     def on_mouse_click(self):
         if base.mouseWatcherNode.hasMouse():
@@ -130,6 +149,9 @@ class Map(NodePath):
                 pickedObj = self.c_handler.getEntry(0).getIntoNodePath()
                 pickedObj = pickedObj.findNetTag("ClickableCity")
                 if not pickedObj.isEmpty():
+                    # check if reset needed
+                    if self.route_complete:
+                        self.reset()
                     self.select_city(str(pickedObj).split("-")[1])
             pickerNP.removeNode()
 
