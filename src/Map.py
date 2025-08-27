@@ -29,6 +29,7 @@ class Map(NodePath):
         self.route = []
 
         self.bus = Bus()
+        self.bus.reparentTo(self)
 
         self.generate_routes_button = DirectButton(text="Generate Routes", scale=0.07,
                                                    pos=(1, 0, -0.9),
@@ -64,10 +65,9 @@ class Map(NodePath):
     def reset(self):
         for city in self.cities:
             city.selected = False
-        self.route = []
+        self._route = []
         self.route_text.setText("Route: ")
-        self.bus.current_coords = None
-        self.bus.distance_traveled = 0
+        self.bus.reset()
 
     def memory_reset(self):
         self.reset()
@@ -110,9 +110,9 @@ class Map(NodePath):
             print(f"City {city_id} already selected")
             return
         self.route.append(city_id)
-        self.route_text.setText(f"Route: {', '.join(self.route)}")
-        self.bus.current_coords = self.cities[int(city_id) - 1].coords
+        self.bus.add_stop(self.cities[int(city_id) - 1].coords)
         self.cities[int(city_id) - 1].selected = True
+        self.cities[int(city_id) - 1].first_city = (len(self.route) == 1)
 
     def on_mouse_click(self):
         if base.mouseWatcherNode.hasMouse():

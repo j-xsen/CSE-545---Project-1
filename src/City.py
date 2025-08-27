@@ -1,6 +1,12 @@
 from panda3d.core import NodePath, TextNode
 
 
+# colors
+UNSELECTED = (0, 1, 0, 1)
+SELECTED = (1, 0, 0, 1)
+FIRST_SELECTED = (0, 0, 1, 1)
+
+
 class City(NodePath):
     def __init__(self, name, coord):
         NodePath.__init__(self, f"city-{name}")
@@ -23,6 +29,14 @@ class City(NodePath):
         self.title_node_path.setBillboardPointEye()
 
         self.selected = False
+        self.first_city = False
+
+    @property
+    def coords(self):
+        return self._coords
+    @coords.setter
+    def coords(self, value):
+        self._coords = value
 
     @property
     def selected(self):
@@ -36,10 +50,22 @@ class City(NodePath):
         except AttributeError:
             pass
         self._selected = value
-        if self._selected:
-            self.model.setColor((1, 0, 0, 1))
+        if self.first_city:
+            self.model.setColor(FIRST_SELECTED)
         else:
-            self.model.setColor((0, 1, 0, 1))
+            self.model.setColor(SELECTED if value else UNSELECTED)
+
+    @property
+    def first_city(self):
+        return getattr(self, "_first_city", False)
+
+    @first_city.setter
+    def first_city(self, value):
+        self._first_city = value
+        if value and self.selected:
+            self.model.setColor(FIRST_SELECTED)
+        else:
+            self.model.setColor(SELECTED if self.selected else UNSELECTED)
 
     @property
     def name(self):
