@@ -35,7 +35,17 @@ class Stop(NodePath):
         self.model.setPos(from_city.x - 50 + (to_city.x - from_city.x) / 2,
                           0,
                           from_city.y - 50 + (to_city.y - from_city.y) / 2)
-        self.model.setScale(2, 5, 5*distance(from_city, to_city)/10)\
+        self.model.setScale(2, 5, 4*distance(from_city, to_city)/10)
+
+        # # ARROW HEAD
+        head_x = from_city.x - 50 + (to_city.x - from_city.x) * 0.9
+        head_z = from_city.y - 50 + (to_city.y - from_city.y) * 0.9
+        arrow_head = loader.loadModel("bam/arrow_head.bam")
+        arrow_head.setColor((1, 1, 1, 1))
+        arrow_head.setHpr(0, 0, roll)
+        arrow_head.setPos(head_x, 0, head_z)
+        arrow_head.setScale(3, 3, 3)
+        arrow_head.reparentTo(self)
 
         # reparent
         self.model.reparentTo(self)

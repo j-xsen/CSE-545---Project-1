@@ -84,6 +84,7 @@ class Map(NodePath):
             self.reset()
             for city_index in p:
                 self.select_city(str(city_index + 1))
+            self.select_city(str(p[0] + 1))  # return to start
             results.append((self.bus.distance_traveled, self.route))
         results.sort(key=lambda x: x[0])
         with open(f"results/{self.TSP.name}.txt", "w") as f:
