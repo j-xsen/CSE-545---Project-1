@@ -11,6 +11,7 @@ def distance(point1, point2):
 
 
 # class for each bus stop
+# mostly visual
 class Stop(NodePath):
     def __init__(self, from_city, to_city):
         NodePath.__init__(self, "Stop")
