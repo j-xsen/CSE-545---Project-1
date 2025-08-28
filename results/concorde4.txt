@@ -24,4 +24,3 @@ Distance: 296.3531529919008, Route: 3, 4, 1, 2, 3
 Distance: 296.3531529919008, Route: 4, 1, 2, 3, 4
 Distance: 296.3531529919008, Route: 4, 3, 2, 1, 4
 -------------------
-Execution time: 0.000055 seconds

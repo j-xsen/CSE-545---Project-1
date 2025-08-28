@@ -50,11 +50,13 @@ Notes:
 - Escape — Quit the application.
 - Left mouse click — Select a city under the cursor to append it to the current route.
   - Selected cities turn red; unselected remain green.
+  - The first city (colored blue) can be clicked again to close the loop, turning all cities gold.
+    - To start a new route, click Reset or click a city.
   - The “Route:” label updates as you click.
 - Zoom slider (left side, labeled “Zoom”) — Adjusts camera distance.
-- Buttons in lower-left (Random4 … Random12) — Switch between bundled problems. The current selection button is darkened.
+- Buttons in lower-left (Random4 … Random12) — Switch between bundled problems. The current selected button is darkened.
 - Buttons on the right:
-  - Generate Routes — Brute-force all permutations for the current instance and save results to results/<NAME>.txt, where NAME comes from the .tsp file (NAME: field).
+  - Generate Routes — Brute-force all permutations for the current instance and save results to results/\<NAME\>.txt, where NAME comes from the .tsp file (NAME: field).
   - Reset — Clears the current route and distance.
 
 Route distance:
@@ -63,13 +65,11 @@ Route distance:
 
 
 ## Results Output
-- When you click Generate Routes, the app enumerates all permutations of city visitation order and writes a sorted list by distance to results/<NAME>.txt, e.g.:
+- When you click Generate Routes, the app enumerates all permutations of city visitation order and writes a sorted list by distance to results/\<NAME\>.txt, as well as the time taken to compute and write the results to results/\<NAME\>_time.txt.:
   - results/concorde4.txt
-- The file includes each route’s total distance and the execution time for writing/sorting results.
-
-Warning on performance:
-- Brute force is factorial in the number of cities (n!), so it quickly becomes infeasible as n grows.
-- Provided samples (4–12) are primarily for visualization and experimentation; generating all routes for 12 cities is heavy.
+  - results/concorde4_time.txt
+- The non-suffixed file includes each route’s total distance
+- The time file contains the execution time for writing/sorting results.
 
 
 ## TSP File Format

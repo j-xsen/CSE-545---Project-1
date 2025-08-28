@@ -1,3 +1,4 @@
+import os
 import time
 from itertools import permutations
 
@@ -79,6 +80,7 @@ class Map(NodePath):
         self.cities = []
 
     def generate_routes(self):
+        start_time = time.perf_counter()
         results = []
         for p in permutations(range(len(self.cities))):
             self.reset()
@@ -88,15 +90,17 @@ class Map(NodePath):
             results.append((self.bus.distance_traveled, self.route))
         results.sort(key=lambda x: x[0])
         with open(f"results/{self.TSP.name}.txt", "w") as f:
-            start_time = time.perf_counter()
             f.write("----- Results -----\n")
             for distance, route in results:
                 f.write(f"Distance: {distance}, Route: {', '.join(route)}\n")
             f.write("-------------------")
-            end_time = time.perf_counter()
-            execution_time = end_time - start_time
-            f.write(f"\nExecution time: {execution_time:.6f} seconds\n")
-            return
+            f.flush()
+            os.fsync(f.fileno())
+        elapsed= time.perf_counter() - start_time
+        with open(f"results/{self.TSP.name}_time.txt", "w") as f:
+            f.write(f"Time taken: {elapsed} seconds\n")
+            f.flush()
+            os.fsync(f.fileno())
 
     def create_city(self, name, coords):
         new_city = City(name, coords)
@@ -135,6 +139,7 @@ class Map(NodePath):
         self.cities[int(city_id) - 1].first_city = is_first_city
 
     def on_mouse_click(self):
+        # https://docs.panda3d.org/1.10/python/programming/collision-detection/clicking-on-3d-objects
         if base.mouseWatcherNode.hasMouse():
             mpos = base.mouseWatcherNode.getMouse()
             pickerNode = CollisionNode('mouseRay')
