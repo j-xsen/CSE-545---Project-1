@@ -1,4 +1,5 @@
 import sys
+from enum import Enum
 
 from direct.gui.DirectButton import DirectButton
 from direct.showbase.ShowBase import ShowBase
@@ -8,6 +9,9 @@ from src.Map import Map
 from src.TSP import read_tsp
 
 loadPrcFile("./config.prc")
+
+class ProblemType(Enum):
+    BRUTE_FORCE = "BF"
 
 
 class TravelingSalesmanProblem(ShowBase):
@@ -29,39 +33,45 @@ class TravelingSalesmanProblem(ShowBase):
         self.problem_buttons = []
         self.current_problem = None
 
+        # mode
+        self.mode = ProblemType.BRUTE_FORCE
+
         # map
         self.map = Map()
         # accept mouse
         self.accept("mouse1-up", self.map.on_mouse_click)
 
-        self.load_problem('src/tsp/Random4.tsp')
+        # default start problem
+        self.load_problem(f'Random4.tsp')
 
     def load_problem(self, path):
         if path == self.current_problem:
             return
         self.current_problem = path
-        imported_tsp = read_tsp(path)
+        imported_tsp = read_tsp(f"src/tsp/{self.mode.value}/{path}")
 
         self.map.memory_reset()
         self.map.TSP = imported_tsp
         self.problem_buttons.clear()
         self.map.create_cities(imported_tsp.coords)
 
-        for i in range(4, 13):
-            extra_arg = f"src/tsp/Random{i}.tsp"
-            col = (i - 4) % 3
-            row = (i - 4) // 3
+        if self.mode == ProblemType.BRUTE_FORCE:
+            # create bruteforce buttons
+            for i in range(4, 13):
+                extra_arg = f"Random{i}.tsp"
+                col = (i - 4) % 3
+                row = (i - 4) // 3
 
-            button = DirectButton(
-                text=f"Random{i}",
-                scale=0.07,
-                frameColor=((0.8, 0.8, 0.8, 1) if extra_arg != self.current_problem else (0.2, 0.2, 0.2, 1)),
-                pos=(-1.1 + col * 0.4, 0, -row * 0.15 - 0.6),
-                command=self.load_problem,
-                extraArgs=[extra_arg]
-            )
+                button = DirectButton(
+                    text=f"Random{i}",
+                    scale=0.07,
+                    frameColor=((0.8, 0.8, 0.8, 1) if extra_arg != self.current_problem else (0.2, 0.2, 0.2, 1)),
+                    pos=(-1.1 + col * 0.4, 0, -row * 0.15 - 0.6),
+                    command=self.load_problem,
+                    extraArgs=[extra_arg]
+                )
 
-            self.problem_buttons.append(button)
+                self.problem_buttons.append(button)
 
 
 app = TravelingSalesmanProblem()
