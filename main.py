@@ -2,6 +2,7 @@ import sys
 from enum import Enum
 
 from direct.gui.DirectButton import DirectButton
+from direct.gui.DirectRadioButton import DirectRadioButton
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import loadPrcFile, VirtualFileSystem, Filename
 
@@ -12,6 +13,7 @@ loadPrcFile("./config.prc")
 
 class ProblemType(Enum):
     BRUTE_FORCE = "BF"
+    FIRST_SEARCH = "FS"
 
 
 class TravelingSalesmanProblem(ShowBase):
@@ -36,6 +38,14 @@ class TravelingSalesmanProblem(ShowBase):
         # mode
         self.mode = ProblemType.BRUTE_FORCE
 
+        # mode radio buttons
+        buttons = [
+            DirectRadioButton(text="Brute Force", scale=0.07, pos=(0.9, 0, 0.9), variable=[self.mode], value=[ProblemType.BRUTE_FORCE], command=self.switch_mode, extraArgs=[ProblemType.BRUTE_FORCE]),
+            DirectRadioButton(text="Breadth/Depth First Search", scale=0.07, pos=(0.7, 0, 0.8), variable=[self.mode], value=[ProblemType.FIRST_SEARCH], command=self.switch_mode, extraArgs=[ProblemType.FIRST_SEARCH])
+        ]
+        for button in buttons:
+            button.setOthers(buttons)
+
         # map
         self.map = Map()
         # accept mouse
@@ -44,18 +54,32 @@ class TravelingSalesmanProblem(ShowBase):
         # default start problem
         self.load_problem(f'Random4.tsp')
 
+    def switch_mode(self, mode):
+        if mode == self.mode:
+            return
+        self.mode = mode
+        if mode == ProblemType.BRUTE_FORCE:
+            self.load_problem(f'Random4.tsp')
+        elif mode == ProblemType.FIRST_SEARCH:
+            self.load_problem(f"11PointDFSBFS.tsp")
+
     def load_problem(self, path):
         if path == self.current_problem:
             return
         self.current_problem = path
         imported_tsp = read_tsp(f"src/tsp/{self.mode.value}/{path}")
 
+        # clear problem buttons
+        for button in self.problem_buttons:
+            button.destroy()
+        self.problem_buttons = []
+
         self.map.memory_reset()
         self.map.TSP = imported_tsp
-        self.problem_buttons.clear()
         self.map.create_cities(imported_tsp.coords)
 
         if self.mode == ProblemType.BRUTE_FORCE:
+            print("Creating BF buttons")
             # create bruteforce buttons
             for i in range(4, 13):
                 extra_arg = f"Random{i}.tsp"
