@@ -22,7 +22,7 @@ class Stop(NodePath):
         print(f"Distance: {distance(from_city, to_city)}")
 
         # # ARROW BODY
-        self.model = loader.loadModel("bam/arrow_body.bam")
+        self.model = loader.loadModel("arrow_body.bam")
         self.model.setColor((1, 1, 1, 1))
 
         # compute roll
@@ -41,7 +41,7 @@ class Stop(NodePath):
         # # ARROW HEAD
         head_x = from_city.x - 50 + (to_city.x - from_city.x) * 0.9
         head_z = from_city.y - 50 + (to_city.y - from_city.y) * 0.9
-        arrow_head = loader.loadModel("bam/arrow_head.bam")
+        arrow_head = loader.loadModel("arrow_head.bam")
         arrow_head.setColor((1, 1, 1, 1))
         arrow_head.setHpr(0, 0, roll)
         arrow_head.setPos(head_x, 0, head_z)

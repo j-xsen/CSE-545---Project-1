@@ -2,7 +2,7 @@ import sys
 
 from direct.gui.DirectButton import DirectButton
 from direct.showbase.ShowBase import ShowBase
-from panda3d.core import loadPrcFile
+from panda3d.core import loadPrcFile, VirtualFileSystem, Filename
 
 from src.Map import Map
 from src.TSP import read_tsp
@@ -14,6 +14,10 @@ class TravelingSalesmanProblem(ShowBase):
     def __init__(self):
         ShowBase.__init__(self)
         ShowBase.set_background_color(self, 0, 0, 0.2, 1)
+
+        # load models
+        vfs = VirtualFileSystem.getGlobalPtr()
+        vfs.mount(Filename("models.mf"), ".", VirtualFileSystem.MFReadOnly)
 
         # disable mouse
         self.disableMouse()

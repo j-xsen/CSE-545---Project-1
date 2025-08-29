@@ -21,7 +21,6 @@ An interactive visualization of the Traveling Salesman Problem built with Panda3
   - City.py — City node model and label.
   - Bus.py — Tracks total distance for the current route and displays it.
   - tsp/ — Sample .tsp inputs (Random4.tsp … Random12.tsp).
-- bam/, gltf/, blend/ — Simple assets for the city marker.
 - results/ — Output directory for brute-force results (txt files).
 - config.prc — Panda3D config (e.g., window title).
 - requirements.txt — Python dependencies.

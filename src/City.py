@@ -1,5 +1,4 @@
-from panda3d.core import NodePath, TextNode
-
+from panda3d.core import NodePath, TextNode, VirtualFileSystem, Filename
 
 # colors
 UNSELECTED = (0, 1, 0, 1)
@@ -13,7 +12,7 @@ class City(NodePath):
         NodePath.__init__(self, f"city-{name}")
         self.setTag("ClickableCity", str(name))
         self.coords = coord
-        self.model = loader.loadModel("bam/square.bam")
+        self.model = loader.loadModel("square.bam")
         self.model.setColor((0, 1, 0, 1))
         self.model.reparentTo(self)
         self.model.setScale(2, 2, 2)
